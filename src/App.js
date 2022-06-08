@@ -1,41 +1,67 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { Col, Collapse, Container, List, Modal, ModalBody, Progress, Row } from 'reactstrap';
-import data from './stubdata/test.json'
+import { Col, Container, Input, Label, Row } from 'reactstrap';
+import tableData from './stubdata/table.json';
+import viewData from './stubdata/view.json';
 import DataTable from './component/datatable/datatable';
-
+import axios from 'axios';
+import env from './env';
 function App() {
-  const [view, setView] = useState(false);
-  const [table, setTable] = useState(false);
+  const [view, setView] = useState();
+  const [table, setTable] = useState();
   const [counter, setCounter] = useState(0);
   const [dataTableSAP, setDataTableSAP] = useState([]);
-  // const [dataTableSnowFlak, setdataTableSnowFlak] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  // const [selectedSAPData, setSelectedSAPData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingDone, setLoadingDone] = useState(false);
+  const [loading, setLoading] = useState();
+  const [serverdataTableSAP, setServerDataTableSAP] = useState({
+    view: [],
+    table: []
+  });
+  const [selectAll, setSelectAll] = useState(false); 
+  const dataMapper = (data) => {
+    let mappedData = [];
+    if (data && data.length > 0) {
+      mappedData = data.map(x => {
+        return {
+          name: x,
+          checked: false
+        }
+      })
+    }
+    return mappedData;
+  }
+  useEffect(() => {
+    setLoading(true);
+    //fetch data
+    axios.get(`${env}/view`).then(res => {
+      setServerDataTableSAP(Object.assign(serverdataTableSAP, { view: dataMapper(res) }));
+      setLoading(false);
+    }).catch(err => {
+      // setDataTableSAP(dataMapper(viewData))
+      setServerDataTableSAP(Object.assign(serverdataTableSAP, { view: dataMapper(viewData) }));
+      setLoading(false);
+    })
+    axios.get(`${env}/Table`).then(res => {
+      setServerDataTableSAP(Object.assign(serverdataTableSAP,{table: dataMapper(res)}));
+      setLoading(false);
+    }).catch(err => {
+      setServerDataTableSAP(Object.assign(serverdataTableSAP, { table: dataMapper(tableData) }));
+      setLoading(false);
+    })
+  }, [])
   useEffect(() => {
     if (view) {
-      let _view = data.table;
+      let _view = serverdataTableSAP.table;
       _view.forEach(x => x.checked = false);
-      setDataTableSAP(data.view);
+      setDataTableSAP(serverdataTableSAP.view);
     }
     if (table) {
-      let _view = data.view;
+      let _view = serverdataTableSAP.view;
       _view.forEach(x => x.checked = false);
-      setDataTableSAP(data.table)
+      setDataTableSAP(serverdataTableSAP.table)
     }
     setSelectAll(false);
-  }, [view, table]);
+  }, [view, table, serverdataTableSAP,loading]);
 
-  const uploadData = () => {
-    setLoading(true)
-  }
-
-  const openNewModal = () => {
-    setLoadingDone(true)
-    setCounter(counter+1);
-  }
 
   const selectAllData = (e) => {
     dataTableSAP.forEach(value => {
@@ -64,34 +90,34 @@ function App() {
           <Col className='left-conatiner' xs="3">
             <div className="view">
               <div>
-                <p className='view-text' onClick={() => {
-                  setView(true)
-                  setTable(false)
-                }}>
+                <Input
+                  name="radio1"
+                  type="radio"
+                  // disabled={loading ? true : false}                  
+                  onChange={() => {
+                    setView(true)
+                    setTable(false)
+                  }}
+                />
+                {' '}
+                <Label check className={`${view === true ? 'selected' : ''}`} >
                   View
-                </p>
-                <Collapse isOpen={view}>
-                  <List type='unstyled' className='text-left-viewitem'>
-                    {
-                      data.view.map((view) => <li>{view.name}</li>)
-                    }
-                  </List>
-                </Collapse>
+                </Label>
               </div>
-              <div>
-                <p className='view-text' onClick={() => {
-                  setTable(true)
-                  setView(false)
-                }}>
+              <div>                
+                <Input
+                  name="radio1"
+                  type="radio"
+                  // disabled={loading ? true : false}
+                  onChange={() => {
+                    setTable(true)
+                    setView(false)
+                  }}
+                />
+                {' '}
+                <Label check className={`${table === true ? 'selected' : ''}`}>
                   Table
-                </p>
-                <Collapse isOpen={table}>
-                  <List type='unstyled' className='text-left-viewitem'>
-                    {
-                      data.table.map((view) => <li>{view.name}</li>)
-                    }
-                  </List>
-                </Collapse>
+                </Label>
               </div>
             </div>
           </Col>
@@ -100,12 +126,14 @@ function App() {
               <span className='logo-text'>DB MIGRATION</span>
             </div>
             <DataTable
-              uploadData={uploadData}
               dataTableSAP={dataTableSAP}
               selectAll={selectAll}
               selectAllData={selectAllData}
               setSelectAll={setSelectAll}
               selectSapData={selectSapData}
+              isView={view}
+              isTable={table}
+              loadingData={loading}
             />
           </Col>
         </Row>
