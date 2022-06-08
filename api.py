@@ -9,6 +9,8 @@ import json
 import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
 from snowflake.sqlalchemy import URL
+import logging as lg
+lg.basicConfig(filename='apilogo.log', encoding='utf-8', level=lg.DEBUG)
 app = Flask(__name__)
 configFilePath = 'cred.ini'
 cfg_parser = configparser.ConfigParser()
@@ -46,31 +48,37 @@ url = URL(
 engine = create_engine(url)
 connection = engine.connect()
 #----------------url routing----------------
-@app.route('/')
-def home():
-    return render_template('home.html',)
+
 @app.route('/Table', methods=['GET'])
 def Table():
+    lg.info('Table API called')
     tablenamequery = f"Select TABLE_NAME from TABLES WHERE SCHEMA_NAME='{CurrentSchema}';"
     cursor.execute(tablenamequery)
     dbs = pd.DataFrame(cursor.fetchall())
+    lg.info('Data Fetched from SAP HANA')
     column_headers = [i[0] for i in cursor.description]
     dbs.columns = column_headers 
     Tableop = dbs['TABLE_NAME'].tolist()
+    lg.info('Data getting sent to front end End of API')
     return jsonify(Tableop)
     
 @app.route('/view', methods=['GET'])
 def view():
+    lg.info('View API called')
     query = f"select * from sys.views where schema_name = '{CurrentSchema}';"
     cursor.execute(query)
     dftviewdata = pd.DataFrame(cursor.fetchall())
+    lg.info('Data Fetched From SAP HANA')
     column_headers = [i[0] for i in cursor.description]
     dftviewdata.columns = column_headers   
     op = dftviewdata['VIEW_NAME'].tolist()
+    lg.info('Data Returned to front end End of API')
     return jsonify(op)
 @app.route('/TableSubmit', methods=['POST'])
 def Data_Processing():
+    lg.info('Post Table api called')
     tn = json.loads(request.data)
+    lg.info('Data recived from front end')
     temp = (len(tn))
     z= 0
     Output = []
@@ -134,12 +142,13 @@ def Data_Processing():
         Output.append(str(nrows))
         
         z = z+1
-  
+    lg.info('Data Processing has finsihed response sent to front end')
     return jsonify(Output)
      
 
 @app.route('/ViewSubmit', methods=['POST'])
 def View_Processing():
+    lg.info('Post View API called')
     VN = json.loads(request.data)
     query = f"select VIEW_NAME,DEFINITION from sys.views where schema_name = '{CurrentSchema}';"
     cursor.execute(query)
@@ -147,21 +156,22 @@ def View_Processing():
     column_headers = [i[0] for i in cursor.description]
     dftviewdata.columns = column_headers   
     voutput = []    
+    
     for i in range(len(VN)):
         data = dftviewdata[dftviewdata['VIEW_NAME'] == VN[i]]# Gets the view name and the definition by comparing whether the user inputed viewname is there in the dataframe
         VIEW_NAME = (data['VIEW_NAME'].tolist())
         definition = (data['DEFINITION'].tolist())
         VIEW_NAME = ''.join(VIEW_NAME)
         definition = ''.join(definition)
-        print(VIEW_NAME)
-        #print(data)
         View_query = f'CREATE OR REPLACE VIEW {VIEW_NAME} as {definition};'
         View_query = View_query.upper()
-        voutput.append(View_query)
+        
+        cnn.execute_string(View_query)
+        #View_Name += ''.join(VIEW_NAME)
+        voutput.append(VIEW_NAME)
+        lg.info('VIEW Processing has finsihed response sent to front end')
     return jsonify(voutput)
             
-@app.route('/TableResult')
-def Table_Result():
-    return render_template('result_table.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
