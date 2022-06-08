@@ -1,5 +1,4 @@
-
-from flask import Flask, jsonify,render_template,url_for
+from flask import Flask, jsonify, url_for
 from sqlalchemy import create_engine
 import configparser
 import pandas as pd
@@ -10,6 +9,7 @@ import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
 from snowflake.sqlalchemy import URL
 import logging as lg
+
 lg.basicConfig(filename='apilogo.log', encoding='utf-8', level=lg.DEBUG)
 app = Flask(__name__)
 configFilePath = 'cred.ini'
@@ -23,7 +23,7 @@ SAP_Password = cfg_parser.get('SAP', 'password')
 CurrentSchema = cfg_parser.get('SAP', 'currentSchema')
 
 conn = dbapi.connect(address=Address, port=Port, user=SAP_User,
-                    password=SAP_Password, currentSchema=CurrentSchema)
+                     password=SAP_Password, currentSchema=CurrentSchema)
 cursor = conn.cursor()
 warehouse = cfg_parser.get('snowflake', 'warehouse')
 Account = cfg_parser.get('snowflake', 'account')
@@ -38,16 +38,19 @@ cnn = snowflake.connector.connect(
     warehouse=warehouse,
     database=Database,
     schema=Schema)
+cur = cnn.cursor()
 url = URL(
-        user=SNOW_User,
-        password=SNOW_Password,
-        account=Account,
-        warehouse=warehouse,
-        database=Database,
-        schema=Schema)
+    user=SNOW_User,
+    password=SNOW_Password,
+    account=Account,
+    warehouse=warehouse,
+    database=Database,
+    schema=Schema)
 engine = create_engine(url)
 connection = engine.connect()
-#----------------url routing----------------
+
+
+# ----------------url routing----------------
 
 @app.route('/Table', methods=['GET'])
 def Table():
@@ -57,11 +60,12 @@ def Table():
     dbs = pd.DataFrame(cursor.fetchall())
     lg.info('Data Fetched from SAP HANA')
     column_headers = [i[0] for i in cursor.description]
-    dbs.columns = column_headers 
+    dbs.columns = column_headers
     Tableop = dbs['TABLE_NAME'].tolist()
     lg.info('Data getting sent to front end End of API')
     return jsonify(Tableop)
-    
+
+
 @app.route('/view', methods=['GET'])
 def view():
     lg.info('View API called')
@@ -70,27 +74,30 @@ def view():
     dftviewdata = pd.DataFrame(cursor.fetchall())
     lg.info('Data Fetched From SAP HANA')
     column_headers = [i[0] for i in cursor.description]
-    dftviewdata.columns = column_headers   
+    dftviewdata.columns = column_headers
     op = dftviewdata['VIEW_NAME'].tolist()
     lg.info('Data Returned to front end End of API')
     return jsonify(op)
+
+
 @app.route('/TableSubmit', methods=['POST'])
 def Data_Processing():
     lg.info('Post Table api called')
     tn = json.loads(request.data)
     lg.info('Data recived from front end')
     temp = (len(tn))
-    z= 0
+    z = 0
     Output = []
 
     while z < temp:
-    # SAP Query ---------------------------
+        # SAP Query ---------------------------
         Queryinfo = f"SELECT COLUMN_NAME,DATA_TYPE_NAME,IS_NULLABLE,GENERATION_TYPE FROM SYS.TABLE_COLUMNS WHERE SCHEMA_NAME= '{CurrentSchema}' AND TABLE_NAME= '{tn[z]}' ORDER BY POSITION;"
         QueryPrimary = f"SELECT COLUMN_NAME,IS_PRIMARY_KEY,IS_UNIQUE_KEY FROM SYS.CONSTRAINTS WHERE SCHEMA_NAME = '{CurrentSchema}' and TABLE_NAME= '{tn[z]}';"
         export_data = f'SELECT * FROM "{CurrentSchema}"."{tn[z]}";'
-    
+
         cursor.execute(Queryinfo)
-        dfInfo = pd.DataFrame(cursor.fetchall(),columns=["COLUMN_NAME", "DATA_TYPE_NAME", "IS_NULLABLE", "GENERATION_TYPE"])
+        dfInfo = pd.DataFrame(cursor.fetchall(),
+                              columns=["COLUMN_NAME", "DATA_TYPE_NAME", "IS_NULLABLE", "GENERATION_TYPE"])
         cursor.execute(QueryPrimary)
         dfPrimary = pd.DataFrame(cursor.fetchall(), columns=["COLUMN_NAME", "IS_PRIMARY_KEY", "IS_UNIQUE_KEY"])
         cursor.execute(export_data)
@@ -119,9 +126,9 @@ def Data_Processing():
             if Column_Data_Type[i] == 'ST_POINT':
                 Column_Data_Type = 'VARCHAR'
         length = len(Column_Name)
-        #print(Column_Name)
+        # print(Column_Name)
         data = ""
-        #print(length)
+        # print(length)
         for j in range(length):
             if Column_Name[j] in Primary_Key and j < length - 1:
                 data += f'{Column_Name[j]} {Column_Data_Type[j]}  Primary Key,'
@@ -140,11 +147,11 @@ def Data_Processing():
         else:
             Output.append('False')
         Output.append(str(nrows))
-        
-        z = z+1
+
+        z = z + 1
     lg.info('Data Processing has finsihed response sent to front end')
     return jsonify(Output)
-     
+
 
 @app.route('/ViewSubmit', methods=['POST'])
 def View_Processing():
@@ -154,24 +161,48 @@ def View_Processing():
     cursor.execute(query)
     dftviewdata = pd.DataFrame(cursor.fetchall())
     column_headers = [i[0] for i in cursor.description]
-    dftviewdata.columns = column_headers   
-    voutput = []    
-    
+    dftviewdata.columns = column_headers
+    voutput = []
+
     for i in range(len(VN)):
-        data = dftviewdata[dftviewdata['VIEW_NAME'] == VN[i]]# Gets the view name and the definition by comparing whether the user inputed viewname is there in the dataframe
+        data = dftviewdata[dftviewdata['VIEW_NAME'] == VN[
+            i]]  # Gets the view name and the definition by comparing whether the user inputed viewname is there in the dataframe
         VIEW_NAME = (data['VIEW_NAME'].tolist())
         definition = (data['DEFINITION'].tolist())
         VIEW_NAME = ''.join(VIEW_NAME)
         definition = ''.join(definition)
         View_query = f'CREATE OR REPLACE VIEW {VIEW_NAME} as {definition};'
         View_query = View_query.upper()
-        
+
         cnn.execute_string(View_query)
-        #View_Name += ''.join(VIEW_NAME)
+        # View_Name += ''.join(VIEW_NAME)
         voutput.append(VIEW_NAME)
         lg.info('VIEW Processing has finsihed response sent to front end')
     return jsonify(voutput)
-            
+
+
+@app.route('/SnowflakeTable', methods=['GET'])
+def SnowflakeTable():
+    SFTquery = f"SELECT TABLE_NAME FROM {Database}.INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'PUBLIC' AND TABLE_TYPE ='BASE TABLE';"
+    #print(connection)
+    #print(SFTquery)
+    cur.execute(SFTquery)
+    df_snow_table = pd.DataFrame.from_records(iter(cur), columns=[x[0] for x in cur.description])
+
+    df = df_snow_table['TABLE_NAME'].tolist()
+    return jsonify(df)
+
+
+@app.route('/SnowflakeView', methods=['GET'])
+def SnowflakeView():
+    SFVquery = f"SELECT TABLE_NAME FROM {Database}.INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA = 'PUBLIC';"
+    print(SFVquery)
+    cur.execute(SFVquery)
+    
+    df_snow_view = pd.DataFrame.from_records(iter(cur), columns=[x[0] for x in cur.description])
+    df_view = df_snow_view['TABLE_NAME'].tolist()
+    return jsonify(df_view)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
