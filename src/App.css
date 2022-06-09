@@ -124,3 +124,8 @@
   color: #4A6BE6;
   font-size: smaller;
 }
+
+.selected{
+  font-weight: bolder;
+    text-decoration: underline;
+}
