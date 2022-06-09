@@ -51,7 +51,10 @@ connection = engine.connect()
 
 
 # ----------------url routing----------------
-
+@app.route('/')
+def Home():
+  Test = 'Welcome to Home'
+  return jsonify(Test)
 @app.route('/Table', methods=['GET'])
 def Table():
     lg.info('Table API called')
