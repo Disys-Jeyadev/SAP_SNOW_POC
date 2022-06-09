@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'datamigration'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_78CBE8E64AE940CCA441F7B5C43916D7 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_078F749FBA8E4E60B3FE5FFDE3918DFA }}
