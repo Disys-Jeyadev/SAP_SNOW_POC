@@ -1,3 +1,3 @@
-const ENV = "http://localhost:5000"
+const ENV = "http://datamigration.azurewebsites.net"
 
 export default ENV;

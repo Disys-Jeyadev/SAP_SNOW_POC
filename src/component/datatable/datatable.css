@@ -2,3 +2,16 @@
     text-align: center;
     margin: 20px 0;
 }
+
+.img-width{
+    width: 10%;
+}
+
+.delete{
+    width: 5%;
+    margin-right: 10px;
+}
+
+.uploadbutton{
+    text-align: right;
+}

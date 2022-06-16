@@ -1,0 +1,22 @@
+.modal-content{
+    margin-top: 1%;
+}
+.text-left{
+    text-align: left;
+}
+.userlist{
+    margin-bottom: 20px;
+}
+li > p{
+    min-width: 250px;
+    overflow-x: hidden;
+    display: inline-block;
+    max-width: 250px;
+    margin-bottom: 0;
+}
+
+.modal-body-user{
+    max-width: 100%;
+    overflow: scroll;
+    max-height: 650px;
+}
