@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'SaptoSnow'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_149BD7A408594830B4F9A96A76550CEB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E07DFC4714DF4F43A0419196BE5DA10C }}
           package: .
