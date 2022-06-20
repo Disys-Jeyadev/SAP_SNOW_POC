@@ -3,6 +3,7 @@ import { List, Modal, ModalBody, Collapse, ModalHeader, Button, Table } from 're
 import axios from "axios";
 import env from '../../env'
 import './usertables.css';
+import ReactPaginate from "react-paginate";
 const UserTables = (props) => {
     const {
         isOpen,
@@ -14,11 +15,19 @@ const UserTables = (props) => {
     const [tables, setTables] = useState(['loading']);
     const [view, setView] = useState([]);
     const [loader, setLoader] = useState(false);
-    const [modalData, setModalData] = useState({
-        DEPARTMENT_ALLOTED: ['test'],
-        DOCTOR_ID: ['test'],
-        DOCTOR_NAME: ['test'],
-    });
+    const [currentItems, setCurrentItems] = useState(null);
+    const [pageCount, setPageCount] = useState(10);
+    const [itemOffset, setItemOffset] = useState(0);
+    const itemsPerPage  = 100;
+    const [modalData, setModalData] = useState([]);
+    const [modalData1, setModalData1] = useState([]);
+    useEffect(() => {
+        // Fetch items from another resources.
+        const endOffset = itemOffset + itemsPerPage;
+        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+        setModalData(modalData1.slice(itemOffset, endOffset));
+        // setPageCount(Math.ceil(modalData.length / itemsPerPage));
+      }, [itemOffset, itemsPerPage]);
     useEffect(() => {
         setOpen(isOpen)
         setTables(data);
@@ -30,6 +39,11 @@ const UserTables = (props) => {
         showModalData(name);
         setOpen(true);
     }
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % modalData1.length;
+        setItemOffset(newOffset);
+      };
 
     // useEffect(() => {
     //     axios.get(`${env}/SnowflakeTable`).then(res => {
@@ -46,33 +60,35 @@ const UserTables = (props) => {
 
     const showModalData = (name) => {
         setLoader(true);
-        axios.post(`${env}/SnowflakeTableData`,[name]).then(res=>{
-            setModalData(JSON.parse(res.data));
+        axios.post(`${env}/SnowflakeTableData`, [name]).then(res => {
+            setModalData(res.data);
+            setModalData1(res.data);
+            setPageCount(Math.ceil(res.data.length / itemsPerPage))
             setLoader(false);
         })
-        .catch(err=>{
-            setModalData([]);
-            setLoader(false);
-        })
+            .catch(err => {
+                setModalData([]);
+                setLoader(false);
+            })
     }
 
     const getColumn = (d) => <td>
-            {d}
-        </td>
+        {d}
+    </td>
 
     const getRows = (child) => <tr>{child}</tr>
 
     const getData = () => {
-        let tableRows = 0;       
+        let tableRows = 0;
         Object.keys(modalData).map(x => {
-            tableRows = modalData && modalData[x] ? modalData[x].length : 0;                    
+            tableRows = modalData && modalData[x] ? modalData[x].length : 0;
         })
         const columns = [];
         const rows = []
-        for(let i = 0 ; i < tableRows ; i++){
-            Object.keys(modalData).map(x =>                
-                    columns.push(getColumn(modalData[x][i]))
-            )  
+        for (let i = 0; i < tableRows; i++) {
+            Object.keys(modalData).map(x =>
+                columns.push(getColumn(modalData[x][i]))
+            )
             rows.push(getRows(columns));
         }
         return rows;
@@ -86,10 +102,10 @@ const UserTables = (props) => {
                     <hr />
                     <br />
                     <br />
-                    <Button onClick={()=>goback()} >Back</Button>
+                    <Button onClick={() => goback()} >Back</Button>
                     <List type="unstyled" className=" userlist text-left">
                         {
-                            tables.map(x => {return(<li><p>{x.TableName}</p> &nbsp; &nbsp; &nbsp;   <Button className="btn btn-secondary btn-sm" onClick={() => { showData(x.TableName) }}>ShowData</Button></li>)})
+                            tables.map(x => { return (<li><p>{x.TableName}</p> &nbsp; &nbsp; &nbsp;   <Button className="btn btn-secondary btn-sm" onClick={() => { showData(x.TableName) }}>ShowData</Button></li>) })
                         }
                     </List>
                 </div>
@@ -106,7 +122,7 @@ const UserTables = (props) => {
 
                 </ModalHeader>
                 <ModalBody className="modal-body-user">
-                   {loader ? 'Loading Data' : <Table
+                    {loader ? 'Loading Data' : <Table
                     >
                         <thead>
                             <tr>
@@ -118,15 +134,31 @@ const UserTables = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                                {
-                                    modalData && modalData.length > 0 ? modalData.map((x,i)=><tr>
-                                        {
-                                            Object.keys(x).map(y=><td>{modalData[i][y]}</td>)
-                                        }
-                                    </tr>) : 'No Data'
-                                }
+                            {
+                                modalData && modalData.length > 0 ? modalData.map((x, i) => <tr>
+                                    {
+                                        Object.keys(x).map(y => <td>{modalData[i][y]}</td>)
+                                    }
+                                </tr>) : 'No Data'
+                            }                            
                         </tbody>
                     </Table>}
+                    <br/>
+                    <br/>
+                    <br/>
+                    {/* <ReactPaginate
+                                breakLabel="..."
+                                nextLabel="next >"
+                                onPageChange={handlePageClick}
+                                pageRangeDisplayed={5}
+                                pageCount={pageCount}
+                                previousLabel="< previous"
+                                renderOnZeroPageCount={null}
+                                className="pagination"
+                            /> */}
+                            <br/>
+                            <br/>
+                            <br/>
                 </ModalBody>
             </Modal>
         </div>

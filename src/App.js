@@ -7,17 +7,20 @@ import DataTable from './component/datatable/datatable';
 import axios from 'axios';
 import env from './env';
 import UserTables from './component/usertables/usertables';
-
+let counterFetch = 0;
 function App() {
   const [view, setView] = useState();
+  const [cview, setCView] = useState();
   const [table, setTable] = useState();
   const [object, setObject] = useState(true);
   const [counter, setCounter] = useState(0);
+  // const [counterFetch, setCounterFetch] = useState(0);
   const [dataTableSAP, setDataTableSAP] = useState([]);
   const [loading, setLoading] = useState();
   const [serverdataTableSAP, setServerDataTableSAP] = useState({
     view: [],
-    table: []
+    table: [],
+    cview:[]
   });
   const [selectAll, setSelectAll] = useState(false); 
   const [uplaodedTables, setuplaodedTables] = useState([{
@@ -37,7 +40,16 @@ function App() {
     }
     return mappedData;
   }
-  useEffect(() => {
+  useEffect(() => {    
+    fetchData();
+    counterFetch = counterFetch + 1;
+    
+  }, [])
+
+  const fetchData =  () => {
+    if(counterFetch > 0){
+      return;
+    }
     setLoading(true);
     //fetch data
     axios.get(`${env}/view`).then(res => {
@@ -56,20 +68,33 @@ function App() {
       // setServerDataTableSAP(Object.assign(serverdataTableSAP, { table: dataMapper(tableData) }));
       setLoading(false);
     })
-  }, [])
+    axios.get(`${env}/CalcView`).then(res => {
+      setServerDataTableSAP(Object.assign(serverdataTableSAP,{cview: dataMapper(res.data)}));
+      setLoading(false);
+    }).catch(err => {
+      // setServerDataTableSAP(Object.assign(serverdataTableSAP, { table: dataMapper(tableData) }));
+      setServerDataTableSAP(Object.assign(serverdataTableSAP,{cview: [{checked: false, 'name': "test"}]}));
+      setLoading(false);
+    })
+  }
   useEffect(() => {
     if (view) {
-      let _view = serverdataTableSAP.table;
+      let _view = serverdataTableSAP.view;
       _view.forEach(x => x.checked = false);
       setDataTableSAP(serverdataTableSAP.view);
     }
+    if (cview) {
+      let _view = serverdataTableSAP.cview;
+      _view.forEach(x => x.checked = false);
+      setDataTableSAP(serverdataTableSAP.cview);
+    }
     if (table) {
-      let _view = serverdataTableSAP.view;
+      let _view = serverdataTableSAP.table;
       _view.forEach(x => x.checked = false);
       setDataTableSAP(serverdataTableSAP.table)
     }
     setSelectAll(false);
-  }, [view, table, serverdataTableSAP,loading]);
+  }, [view, table, serverdataTableSAP,loading, cview]);
 
 
   const selectAllData = (e) => {
@@ -116,6 +141,7 @@ function App() {
                   onChange={() => {
                     setView(true)
                     setTable(false)
+                    setCView(false)
                   }}
                 />
                 {' '}
@@ -131,11 +157,28 @@ function App() {
                   onChange={() => {
                     setTable(true)
                     setView(false)
+                    setCView(false)
                   }}
                 />
                 {' '}
                 <Label check className={`${table === true ? 'selected' : ''}`}>
                   Table
+                </Label>
+              </div>  
+              <div>                
+                <Input
+                  name="radio1"
+                  type="radio"
+                  // disabled={loading ? true : false}
+                  onChange={() => {
+                    setTable(false)
+                    setView(false)
+                    setCView(true)
+                  }}
+                />
+                {' '}
+                <Label check className={`${cview === true ? 'selected' : ''}`}>
+                  Calculated View
                 </Label>
               </div>              
             </div>
@@ -154,6 +197,7 @@ function App() {
               selectSapData={selectSapData}
               isView={view}
               isTable={table}
+              isCView={cview}
               loadingData={loading}
               openUplaodedTables={openUplaodedTables}
             />}

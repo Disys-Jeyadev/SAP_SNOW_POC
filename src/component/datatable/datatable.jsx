@@ -13,11 +13,13 @@ const DataTable = (props) => {
         selectSapData,
         isView,
         isTable,
+        isCView,
         loadingData,
         openUplaodedTables
     } = props;
     const [filteredData, setFilteredData] = useState(dataTableSAP);
     const [loading, setLoading] = useState(false);
+    const [viewCreated, setviewCreated] = useState();
     const [loadingDone, setLoadingDone] = useState(false);
     const [confimration, setConfimration] = useState(false);
     const [confimrationModal, setConfimrationModal] = useState(false);
@@ -40,7 +42,8 @@ const DataTable = (props) => {
 
     useEffect(() => {
         setSnowFlakedata([]);
-    }, [isView, isTable])
+        setLoadingDone(false);
+    }, [isView, isTable, isCView])
 
     const openNewModal = () => {
         setLoadingDone(true)
@@ -80,9 +83,26 @@ const DataTable = (props) => {
             setLoading(false);
             setConfimration(false);
             setLoadingDone(true)
+            setviewCreated(true);
         }).catch(err => {
             setLoading(false);
             setConfimration(false);
+            setviewCreated(false);
+        })
+    }
+    const uploadCView = (data) => {
+        setLoading(true);
+        axios.post(`${env}/CalcView`, data).then(res => {
+            setUploadedTables(['test']);
+            setLoading(false);
+            setConfimration(false);
+            setLoadingDone(true)
+            setviewCreated(true);
+        }).catch(err => {
+            setUploadedTables([]);
+            setLoading(false);
+            setConfimration(false);
+            setviewCreated(false);
         })
     }
 
@@ -91,11 +111,13 @@ const DataTable = (props) => {
         setConfimration(true);
         setConfimrationModal(false);
         const data = [];
-        snowFlakedata.forEach(x => data.push(x.name));
+        snowFlakedata.forEach(x => x.checked ? data.push(x.name) : '');
         if (isView) {
             uploadView(data);
-        } else {
+        } else if(isTable) {
             uploadTable(data);
+        }else if(isCView){
+            uploadCView(data);
         }
     }
 
@@ -140,6 +162,8 @@ const DataTable = (props) => {
 
     return (
         <Row className='data-table-body'>
+            { viewCreated !== undefined ? viewCreated === true ? <h5 className="text-success">View created successfully</h5> :
+            <h5 className="text-danger">Failed to create view</h5> : ''}
             <Col xs="5">
                 <div className='list-body'>
                     <div className='list-header'>
@@ -149,9 +173,9 @@ const DataTable = (props) => {
                         SAP HANA
                     </div>
                     <List type='unstyled' className='list-body-inner'>
-                        {isTable === undefined && isView === undefined ? '' : <Input type="text" onChange={(e) => filterSAPData(e)} />}
+                        {isTable === undefined && isView === undefined && isCView === undefined ? '' : <Input type="text" onChange={(e) => filterSAPData(e)} />}
                         {
-                            isTable === undefined && isView === undefined ? 'Select view or table' : dataTableSAP.length > 0 ?
+                            isTable === undefined && isView === undefined && isCView === undefined ? 'Select view or table' : dataTableSAP.length > 0 ?
                                 <li>
                                     <Input type="checkbox" key="selectAll" checked={selectAll} value={'selectAll'} onChange={(e) => {
                                         console.log(e.target.checked);
@@ -252,7 +276,7 @@ const DataTable = (props) => {
                     </div>
                 </ModalBody>
             </Modal>
-            <TransferModal isOpen={loadingDone} data={uploadedTables} openUplaodedTables={openUplaodedTables} />
+            {isTable ? <TransferModal isOpen={loadingDone} data={uploadedTables} openUplaodedTables={openUplaodedTables} /> : ''}
             <Modal
                 isOpen={confimrationModal}
             >

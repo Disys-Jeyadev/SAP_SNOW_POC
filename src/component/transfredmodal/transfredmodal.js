@@ -45,12 +45,12 @@ const TransferModal = (props) => {
                     </div>
                     <div className='view-text-1'>
                         {
-                            data && data.length > 0 && data.map(x=><div>
+                            data && data.length > 0 ? data.map(x=><div>
                                 <div>Table Name:<strong>{x.TableName}</strong> </div>
                                 <div>Data has tranfered Cout: <strong>{x.Count}</strong></div>
                                 <div>Uploaded : <strong>{x.Status}</strong></div>
                                 <hr/>
-                            </div>)
+                            </div>) : ''
                         }
                     </div>
                     <div>
