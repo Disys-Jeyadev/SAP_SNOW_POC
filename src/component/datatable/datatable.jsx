@@ -26,6 +26,7 @@ const DataTable = (props) => {
     const [snowFlakedata, setSnowFlakedata] = useState([]);
     const [uploadedTables, setUploadedTables] = useState([]);
     const [searchText, setSearchText] = useState('');
+    const [procesingTable, setprocesingTable] = useState('');
     const filterSAPData = (e) => {
         if (e.target.value.length > 3)
             setFilteredData(dataTableSAP.filter(x => (x.name.toLowerCase()).includes(e.target.value.toLowerCase())))
@@ -64,15 +65,28 @@ const DataTable = (props) => {
 
 
     const uploadTable = (data) => { 
+        axios.get(`${env}/CurrentTable`).then(res=>{
+            setprocesingTable(res.data);
+        })
+        const myinterval = setInterval(() => {
+            axios.get(`${env}/CurrentTable`).then(res=>{
+                setprocesingTable(res.data);
+            })
+        }, 3000);
         axios.post(`${env}/TableSubmit`, data).then(res => {
             setUploadedTables(res.data);
             setLoading(false);
             setConfimration(false);
             setLoadingDone(true)
+            clearInterval(myinterval);
+            setprocesingTable('');
         }).catch(err => {
             // setSnowFlakedata([]);
             setLoading(false);
             setConfimration(false);
+            clearInterval(myinterval);
+            setprocesingTable('');
+
         })
     }
 
@@ -170,7 +184,7 @@ const DataTable = (props) => {
                         <span>
                             <img src="sap.png" alt="sap" className="img-width" />
                         </span>
-                        SAP HANA
+                        SAP HANA OBJECTS
                     </div>
                     <List type='unstyled' className='list-body-inner'>
                         {isTable === undefined && isView === undefined && isCView === undefined ? '' : <Input type="text" onChange={(e) => filterSAPData(e)} />}
@@ -222,7 +236,7 @@ const DataTable = (props) => {
                         <span>
                             <img src="hana.png" alt="hana" className="img-width" />
                         </span>
-                        SELECTED OBJECTS
+                       USER SELECTED OBJECTS
                     </div>
                     <List type='unstyled' className='list-body-inner text-left'>
                         {
@@ -258,6 +272,9 @@ const DataTable = (props) => {
                         <br />
                         <br />
                         <br />
+                        {
+                            isTable && loading ? <div>Uploading Table- {`${procesingTable.Current_Table}`}</div> : ''
+                        }
                     </div>
                     <div className='row'>
                         <span className='float-left'>

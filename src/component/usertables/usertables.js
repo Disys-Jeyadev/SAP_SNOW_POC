@@ -4,6 +4,10 @@ import axios from "axios";
 import env from '../../env'
 import './usertables.css';
 import ReactPaginate from "react-paginate";
+// import { AgGridReact } from 'ag-grid-react';
+// import 'ag-grid-enterprise';
+import 'ag-grid-community/dist/styles/ag-grid.css'; // Core grid CSS, always needed
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css'; // Optional theme CSS
 const UserTables = (props) => {
     const {
         isOpen,

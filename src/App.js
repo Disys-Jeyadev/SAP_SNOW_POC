@@ -131,9 +131,24 @@ function App() {
       <Container>
         <Row>
           <Col className='left-conatiner' xs="3">
-            <div className="view" onClick={()=>{setObject(true)}} >
-              <h5  >Objects</h5>
-              <div>
+            <div className="view" onClick={()=>{setObject(true)}} >              
+              <h4> Source Database</h4>
+              <div>SAP HANA</div>  
+              <hr/>      
+              <h4> Target Database</h4>
+              <div>SNOWFLAKE</div>        
+            </div>
+            {/* <h5 className='view1 pointer' onClick={()=>{setObject(false)}}>Show User Tables</h5> */}
+          </Col>
+          <Col xs="9">
+            <div className='app-header text-center'>
+              <img src='logo1.png' alt='' className='img-width' />
+              <span className='logo-text'>  DB MIGRATION</span>
+            </div>
+            
+            <h5 className='text-left'>Select Object</h5>
+            <div className='objets-sources'>
+            <div>
                 <Input
                   name="radio1"
                   type="radio"
@@ -180,14 +195,7 @@ function App() {
                 <Label check className={`${cview === true ? 'selected' : ''}`}>
                   Calculated View
                 </Label>
-              </div>              
-            </div>
-            {/* <h5 className='view1 pointer' onClick={()=>{setObject(false)}}>Show User Tables</h5> */}
-          </Col>
-          <Col xs="9">
-            <div className='app-header text-center'>
-              <img src='logo1.png' alt='' className='img-width' />
-              <span className='logo-text'>  DB MIGRATION</span>
+              </div>
             </div>
             {object && <DataTable
               dataTableSAP={dataTableSAP}

@@ -156,3 +156,8 @@
 .pointer{
   cursor: pointer;
 }
+
+.objets-sources{
+  display: flex;
+  gap: 3%;
+}
