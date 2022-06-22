@@ -12,7 +12,6 @@ const TransferModal = (props) => {
     const [open, setOpen] = useState(isOpen);
     const [tables, setTables] = useState(['test']);
     useEffect(() => {
-        debugger
         setOpen(isOpen)
     }, [isOpen]);
 

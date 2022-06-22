@@ -18,7 +18,7 @@ li > p{
 .modal-body-user{
     max-width: 100%;
     overflow: scroll;
-    max-height: 650px;
+    max-height: 600px;
 }
 
 .pagination {
@@ -56,3 +56,6 @@ li > p{
     background-color: #ddd;
   } 
   
+  .text-left{
+    text-align: left;
+  }

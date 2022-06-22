@@ -1,3 +1,3 @@
-const ENV = "http://datamigration.azurewebsites.net"
+const ENV = "https://dbmigrations.azurewebsites.net"
 
 export default ENV;

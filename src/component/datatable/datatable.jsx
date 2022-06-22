@@ -254,7 +254,10 @@ const DataTable = (props) => {
                         }
                     </List>
                 </div>
-                <Button onClick={() => setConfimrationModal(true)} type="button" className="btn btn-success uploadbutton" disabled={loading} >Submit</Button>
+                <Button onClick={() => setConfimrationModal(true)} 
+                type="button" 
+                className="btn btn-success uploadbutton" 
+                disabled={snowFlakedata.filter(x=>x.checked).length === 0} >Submit</Button>
             </Col>
             <Modal
                 toggle={() => {
@@ -273,7 +276,7 @@ const DataTable = (props) => {
                         <br />
                         <br />
                         {
-                            isTable && loading ? <div>Uploading Table- {`${procesingTable.Current_Table}`}</div> : ''
+                            // isTable && loading ? <div>Uploading Table- {`${procesingTable.Current_Table}`}</div> : ''
                         }
                     </div>
                     <div className='row'>

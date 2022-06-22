@@ -22,7 +22,7 @@ const UserTables = (props) => {
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(10);
     const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage  = 100;
+    const itemsPerPage = 50;
     const [modalData, setModalData] = useState([]);
     const [modalData1, setModalData1] = useState([]);
     useEffect(() => {
@@ -30,8 +30,8 @@ const UserTables = (props) => {
         const endOffset = itemOffset + itemsPerPage;
         console.log(`Loading items from ${itemOffset} to ${endOffset}`);
         setModalData(modalData1.slice(itemOffset, endOffset));
-        // setPageCount(Math.ceil(modalData.length / itemsPerPage));
-      }, [itemOffset, itemsPerPage]);
+        setPageCount(Math.ceil(modalData1.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage]);
     useEffect(() => {
         setOpen(isOpen)
         setTables(data);
@@ -47,7 +47,7 @@ const UserTables = (props) => {
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % modalData1.length;
         setItemOffset(newOffset);
-      };
+    };
 
     // useEffect(() => {
     //     axios.get(`${env}/SnowflakeTable`).then(res => {
@@ -64,9 +64,10 @@ const UserTables = (props) => {
 
     const showModalData = (name) => {
         setLoader(true);
+        const endOffset = itemOffset + itemsPerPage;
         axios.post(`${env}/SnowflakeTableData`, [name]).then(res => {
-            setModalData(res.data);
             setModalData1(res.data);
+            setModalData((res.data).slice(itemOffset, endOffset));
             setPageCount(Math.ceil(res.data.length / itemsPerPage))
             setLoader(false);
         })
@@ -105,8 +106,11 @@ const UserTables = (props) => {
                     <h4>Snowflake Tables</h4>
                     <hr />
                     <br />
-                    <br />
+                    <div className="text-left">
                     <Button onClick={() => goback()} >Back</Button>
+                    </div>
+                    <br />
+                    
                     <List type="unstyled" className=" userlist text-left">
                         {
                             tables.map(x => { return (<li><p>{x.TableName}</p> &nbsp; &nbsp; &nbsp;   <Button className="btn btn-secondary btn-sm" onClick={() => { showData(x.TableName) }}>ShowData</Button></li>) })
@@ -120,7 +124,7 @@ const UserTables = (props) => {
                 isOpen={open}
                 toggle={() => setOpen(false)}
                 fullscreen="xl"
-                size="lg"
+                size="xl"
             >
                 <ModalHeader toggle={() => setOpen(false)}>
 
@@ -144,25 +148,27 @@ const UserTables = (props) => {
                                         Object.keys(x).map(y => <td>{modalData[i][y]}</td>)
                                     }
                                 </tr>) : 'No Data'
-                            }                            
+                            }
                         </tbody>
                     </Table>}
-                    <br/>
-                    <br/>
-                    <br/>
-                    {/* <ReactPaginate
-                                breakLabel="..."
-                                nextLabel="next >"
-                                onPageChange={handlePageClick}
-                                pageRangeDisplayed={5}
-                                pageCount={pageCount}
-                                previousLabel="< previous"
-                                renderOnZeroPageCount={null}
-                                className="pagination"
-                            /> */}
-                            <br/>
-                            <br/>
-                            <br/>
+                    <br />
+                    <br />
+                    <br />
+                    {
+                        !loader && <ReactPaginate
+                        breakLabel="..."
+                        nextLabel="next >"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        pageCount={pageCount}
+                        previousLabel="< previous"
+                        renderOnZeroPageCount={null}
+                        className="pagination"
+                    />
+                    }
+                    <br />
+                    <br />
+                    <br />
                 </ModalBody>
             </Modal>
         </div>
