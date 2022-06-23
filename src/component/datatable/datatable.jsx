@@ -137,7 +137,7 @@ const DataTable = (props) => {
 
     const pushDataToSnowFlak = () => {
         const data = [];
-        filteredData.forEach(x => x.checked ? data.push({ name: x.name, checked: false }) : '');
+        filteredData.forEach(x => x.checked ? data.push({ name: x.name, checked: true }) : '');
         setSnowFlakedata(data);
         // setFilteredData(filteredData.filter(x=> !x.checked));
         // setSelectAll(false);
@@ -299,15 +299,17 @@ const DataTable = (props) => {
             {isTable ? <TransferModal isOpen={loadingDone} data={uploadedTables} openUplaodedTables={openUplaodedTables} /> : ''}
             <Modal
                 isOpen={confimrationModal}
+                size="xl"
             >
-                <ModalHeader toggle={()=>{setConfimrationModal(false)}}>
-                    User Selected Views/Tables
+                <ModalHeader toggle={()=>{setConfimrationModal(false)}} className="confimHeader">
+                Confirm the selected object 
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody className="confirmbody">
                     <input type="text" placeholder="serach" onChange={(e)=>{
                         setSearchText(e.target.value)
                     }} />
                     <br/>
+                    <div className="search-tables">
                     {
                         snowFlakedata.length > 0 && snowFlakedata.filter(x=>{
                             if(x.checked && searchText === ''){
@@ -325,9 +327,9 @@ const DataTable = (props) => {
                             return("");
                         })
                     }
+                    </div>                    
                 </ModalBody>
-                <ModalFooter>
-                    Do you want to upload ?
+                <ModalFooter className="confirmFooter">                
                     <Button
                         color="primary"
                         onClick={()=>uploadData()}

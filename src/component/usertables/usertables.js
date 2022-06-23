@@ -22,9 +22,11 @@ const UserTables = (props) => {
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(10);
     const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 50;
+    const itemsPerPage = 100;
     const [modalData, setModalData] = useState([]);
     const [modalData1, setModalData1] = useState([]);
+    const [noData, setNodata] = useState('Select Table');
+    const [selectedindex, setSelectedindex] = useState(-1);
     useEffect(() => {
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
@@ -38,10 +40,12 @@ const UserTables = (props) => {
         setTable(data);
     }, [isOpen, data]);
 
-    const showData = (name) => {
+    const showData = (name, selected) => {
         //load table data
+        setNodata('No Data');
         showModalData(name);
         setOpen(true);
+        setSelectedindex(selected);
     }
 
     const handlePageClick = (event) => {
@@ -101,36 +105,26 @@ const UserTables = (props) => {
 
     return (
         <div>
-            <div className="row mt-4">
-                <div className="col-10">
-                    <h4>Snowflake Tables</h4>
-                    <hr />
-                    <br />
-                    <div className="text-left">
-                    <Button onClick={() => goback()} >Back</Button>
-                    </div>
-                    <br />
+            <h4><span className="f-left"><Button onClick={() => goback()} >Back</Button></span>Fresh Migration Snowflake Tables</h4>
+            <div className="text-left">
                     
+            </div>
+            <hr/>
+            <div className="row mt-4">
+                <div className="col-4">                    
+                    <br />                    
+                    <br />                    
                     <List type="unstyled" className=" userlist text-left">
                         {
-                            tables.map(x => { return (<li><p>{x.TableName}</p> &nbsp; &nbsp; &nbsp;   <Button className="btn btn-secondary btn-sm" onClick={() => { showData(x.TableName) }}>ShowData</Button></li>) })
+                            tables.map((x, i )=> { return (<li><p className={i === selectedindex ? 'selected-table' : ''} onClick={()=>showData(x.TableName , i)}>{x.TableName}</p></li>) })
                         }
                     </List>
                 </div>
 
-
-            </div>
-            <Modal
-                isOpen={open}
-                toggle={() => setOpen(false)}
-                fullscreen="xl"
-                size="xl"
-            >
-                <ModalHeader toggle={() => setOpen(false)}>
-
-                </ModalHeader>
-                <ModalBody className="modal-body-user">
-                    {loader ? 'Loading Data' : <Table
+                <div className="col-6">                    
+                <br />
+                <br />
+                {loader ? 'Loading Data' : <Table
                     >
                         <thead>
                             <tr>
@@ -147,7 +141,7 @@ const UserTables = (props) => {
                                     {
                                         Object.keys(x).map(y => <td>{modalData[i][y]}</td>)
                                     }
-                                </tr>) : 'No Data'
+                                </tr>) : noData
                             }
                         </tbody>
                     </Table>}
@@ -169,6 +163,21 @@ const UserTables = (props) => {
                     <br />
                     <br />
                     <br />
+                </div>
+
+
+            </div>
+            <Modal
+                isOpen={false}
+                toggle={() => setOpen(false)}
+                fullscreen="xl"
+                size="xl"
+            >
+                <ModalHeader toggle={() => setOpen(false)}>
+
+                </ModalHeader>
+                <ModalBody className="modal-body-user">
+                    
                 </ModalBody>
             </Modal>
         </div>

@@ -59,3 +59,13 @@ li > p{
   .text-left{
     text-align: left;
   }
+
+  .f-left{
+    float: left;
+  }
+
+  .selected-table{
+    color: #4caf50;
+    text-decoration: underline;
+    font-weight: bolder;
+  }

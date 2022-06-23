@@ -15,3 +15,21 @@
 .uploadbutton{
     text-align: right;
 }
+
+.confimHeader{
+    background: #5571DB 0% 0% no-repeat padding-box;
+    color: white;
+}
+
+.confirmbody{
+    text-align: center;
+}
+.confirmFooter{
+    text-align: center;
+    justify-content: center;
+}
+
+.search-tables{
+    text-align: left;
+    margin-left: 41.5%;
+}

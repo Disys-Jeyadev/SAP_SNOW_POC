@@ -20,13 +20,13 @@ function App() {
   const [serverdataTableSAP, setServerDataTableSAP] = useState({
     view: [],
     table: [],
-    cview:[]
+    cview: []
   });
-  const [selectAll, setSelectAll] = useState(false); 
+  const [selectAll, setSelectAll] = useState(false);
   const [uplaodedTables, setuplaodedTables] = useState([{
     name: 'test',
     count: 100,
-    uploaded : true
+    uploaded: true
   }]);
   const dataMapper = (data) => {
     let mappedData = [];
@@ -40,14 +40,14 @@ function App() {
     }
     return mappedData;
   }
-  useEffect(() => {    
+  useEffect(() => {
     fetchData();
     counterFetch = counterFetch + 1;
-    
+
   }, [])
 
-  const fetchData =  () => {
-    if(counterFetch > 0){
+  const fetchData = () => {
+    if (counterFetch > 0) {
       return;
     }
     setLoading(true);
@@ -62,18 +62,18 @@ function App() {
       setLoading(false);
     })
     axios.get(`${env}/Table`).then(res => {
-      setServerDataTableSAP(Object.assign(serverdataTableSAP,{table: dataMapper(res.data)}));
+      setServerDataTableSAP(Object.assign(serverdataTableSAP, { table: dataMapper(res.data) }));
       setLoading(false);
     }).catch(err => {
       // setServerDataTableSAP(Object.assign(serverdataTableSAP, { table: dataMapper(tableData) }));
       setLoading(false);
     })
     axios.get(`${env}/CalcView`).then(res => {
-      setServerDataTableSAP(Object.assign(serverdataTableSAP,{cview: dataMapper(res.data)}));
+      setServerDataTableSAP(Object.assign(serverdataTableSAP, { cview: dataMapper(res.data) }));
       setLoading(false);
     }).catch(err => {
       // setServerDataTableSAP(Object.assign(serverdataTableSAP, { table: dataMapper(tableData) }));
-      setServerDataTableSAP(Object.assign(serverdataTableSAP,{cview: [{checked: false, 'name': "test"}]}));
+      setServerDataTableSAP(Object.assign(serverdataTableSAP, { cview: [{ checked: false, 'name': "test" }] }));
       setLoading(false);
     })
   }
@@ -94,7 +94,7 @@ function App() {
       setDataTableSAP(serverdataTableSAP.table)
     }
     setSelectAll(false);
-  }, [view, table, serverdataTableSAP,loading, cview]);
+  }, [view, table, serverdataTableSAP, loading, cview]);
 
 
   const selectAllData = (e) => {
@@ -117,7 +117,7 @@ function App() {
     console.log(_dataTableSAP);
   }
 
-  const openUplaodedTables = (data)=>{
+  const openUplaodedTables = (data) => {
     setObject(false);
     setuplaodedTables(data);
   }
@@ -131,72 +131,80 @@ function App() {
       <Container>
         <Row>
           <Col className='left-conatiner' xs="3">
-            <div className="view" onClick={()=>{setObject(true)}} >              
+            <div className="view" onClick={() => { setObject(true) }} >
               <h4> Source Database</h4>
-              <div>SAP HANA</div>  
-              <hr/>      
+              <div>SAP HANA</div>
+              <hr />
               <h4> Target Database</h4>
-              <div>SNOWFLAKE</div>        
+              <div>SNOWFLAKE</div>
             </div>
             {/* <h5 className='view1 pointer' onClick={()=>{setObject(false)}}>Show User Tables</h5> */}
           </Col>
           <Col xs="9">
             <div className='app-header text-center'>
-              <img src='logo1.png' alt='' className='img-width' />
-              <span className='logo-text'>  DB MIGRATION</span>
+              {/* <img src='logo1.png' alt='' className='img-width' /> */}
+              <span className='logo-text'> Disys DB Migration Assistant</span>
             </div>
-            
-            <h5 className='text-left'>Select Object</h5>
-            <div className='objets-sources'>
-            <div>
-                <Input
-                  name="radio1"
-                  type="radio"
-                  // disabled={loading ? true : false}                  
-                  onChange={() => {
-                    setView(true)
-                    setTable(false)
-                    setCView(false)
-                  }}
-                />
-                {' '}
-                <Label check className={`${view === true ? 'selected' : ''}`} >
-                  View
-                </Label>
+
+
+            {
+              object && <div>
+                <h5 className='text-left'>Select Object For Migration</h5>
+                <div className='objets-sources'>
+                  <div>
+                    <Input
+                      name="radio1"
+                      type="radio"
+                      checked={table}
+                      // disabled={loading ? true : false}
+                      onChange={() => {
+                        setTable(true)
+                        setView(false)
+                        setCView(false)
+                      }}
+                    />
+                    {' '}
+                    <Label check className={`${table === true ? 'selected' : ''}`}>
+                      Table
+                    </Label>
+                  </div>
+                  <div>
+                    <Input
+                      name="radio1"
+                      type="radio"
+                      checked={view}
+                      // disabled={loading ? true : false}                  
+                      onChange={() => {
+                        setView(true)
+                        setTable(false)
+                        setCView(false)
+                      }}
+                    />
+                    {' '}
+                    <Label check className={`${view === true ? 'selected' : ''}`} >
+                      View
+                    </Label>
+                  </div>
+                  <div>
+                    <Input
+                      name="radio1"
+                      type="radio"
+                      checked={cview}
+                      // disabled={loading ? true : false}
+                      onChange={() => {
+                        setTable(false)
+                        setView(false)
+                        setCView(true)
+                      }}
+                    />
+                    {' '}
+                    <Label check className={`${cview === true ? 'selected' : ''}`}>
+                      Calculated View
+                    </Label>
+                  </div>
+                </div>
               </div>
-              <div>                
-                <Input
-                  name="radio1"
-                  type="radio"
-                  // disabled={loading ? true : false}
-                  onChange={() => {
-                    setTable(true)
-                    setView(false)
-                    setCView(false)
-                  }}
-                />
-                {' '}
-                <Label check className={`${table === true ? 'selected' : ''}`}>
-                  Table
-                </Label>
-              </div>  
-              <div>                
-                <Input
-                  name="radio1"
-                  type="radio"
-                  // disabled={loading ? true : false}
-                  onChange={() => {
-                    setTable(false)
-                    setView(false)
-                    setCView(true)
-                  }}
-                />
-                {' '}
-                <Label check className={`${cview === true ? 'selected' : ''}`}>
-                  Calculated View
-                </Label>
-              </div>
-            </div>
+            }
             {object && <DataTable
               dataTableSAP={dataTableSAP}
               selectAll={selectAll}
