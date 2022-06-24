@@ -129,95 +129,151 @@ function App() {
   return (
     <div className="App">
       <Container>
-        <Row>
-          <Col className='left-conatiner' xs="3">
-            <div className="view" onClick={() => { setObject(true) }} >
-              <h4> Source Database</h4>
-              <div>SAP HANA</div>
-              <hr />
-              <h4> Target Database</h4>
-              <div>SNOWFLAKE</div>
+        <Row className='top-row'>
+          <Col xs="2">
+            <div className='db-logo'>
+              <img src='snowflak-sap.png' alt='db-logo' />
             </div>
-            {/* <h5 className='view1 pointer' onClick={()=>{setObject(false)}}>Show User Tables</h5> */}
           </Col>
-          <Col xs="9">
-            <div className='app-header text-center'>
-              {/* <img src='logo1.png' alt='' className='img-width' /> */}
-              <span className='logo-text'> Disys DB Migration Assistant</span>
-            </div>
+          <Col xs="10">
+            <h3 className='db-logo-text'>
+              Disys DB Migration Assistant
+            </h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="2">
+          </Col>
+          <Col xs="10">
 
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="2">
+          </Col>
 
-            {
-              object && <div>
-                <h5 className='text-left'>Select Object For Migration</h5>
-                <div className='objets-sources'>
-                  <div>
-                    <Input
-                      name="radio1"
-                      type="radio"
-                      checked={table}
-                      // disabled={loading ? true : false}
-                      onChange={() => {
-                        setTable(true)
-                        setView(false)
-                        setCView(false)
-                      }}
-                    />
-                    {' '}
-                    <Label check className={`${table === true ? 'selected' : ''}`}>
-                      Table
-                    </Label>
-                  </div>
-                  <div>
-                    <Input
-                      name="radio1"
-                      type="radio"
-                      checked={view}
-                      // disabled={loading ? true : false}                  
-                      onChange={() => {
-                        setView(true)
-                        setTable(false)
-                        setCView(false)
-                      }}
-                    />
-                    {' '}
-                    <Label check className={`${view === true ? 'selected' : ''}`} >
-                      View
-                    </Label>
-                  </div>
-                  <div>
-                    <Input
-                      name="radio1"
-                      type="radio"
-                      checked={cview}
-                      // disabled={loading ? true : false}
-                      onChange={() => {
-                        setTable(false)
-                        setView(false)
-                        setCView(true)
-                      }}
-                    />
-                    {' '}
-                    <Label check className={`${cview === true ? 'selected' : ''}`}>
-                      Calculated View
-                    </Label>
+          <Col xs="10">
+            <Row>
+              <Col xs="4">
+                <div className="panel" onClick={() => { setObject(true) }} >
+                  <h4 className='panel-heading upper'> Source Database</h4>
+                  <div className='panel-body'>
+                    <span>
+                      <img src="sap.png" alt="sap" className="img-width" />
+                    </span>
+                    SAP HANA
                   </div>
                 </div>
-              </div>
-            }
-            {object && <DataTable
-              dataTableSAP={dataTableSAP}
-              selectAll={selectAll}
-              selectAllData={selectAllData}
-              setSelectAll={setSelectAll}
-              selectSapData={selectSapData}
-              isView={view}
-              isTable={table}
-              isCView={cview}
-              loadingData={loading}
-              openUplaodedTables={openUplaodedTables}
-            />}
-            {!object && <UserTables data={uplaodedTables} goback={goback} />}
+                <div className="panel" onClick={() => { setObject(true) }} >
+                  <h4 className='panel-heading upper'> Target Database</h4>
+                  <div className='panel-body'>
+                    <span>
+                      <img src="hana.png" alt="hana" className="img-width" />
+                    </span>
+                    SNOWFLAKE
+                  </div>
+                </div>
+              </Col>
+              <Col xs="8">
+                <div className={object && 'panel-heading-new'}>
+                  {
+                    object && <div className='object-selection-new'>
+                      <h5 className='text-left upper' >Select Object For Migration</h5>
+                      <div className='objets-sources'>
+                        <div>
+                          <Input
+                            name="radio1"
+                            type="radio"
+                            checked={false}
+                            // disabled={loading ? true : false}
+                            onChange={() => {
+                            }}
+                          />
+                          {' '}
+                          <Label check>
+                            Select All
+                          </Label>
+                        </div>
+                        <div className='break'></div>
+                        <div>
+                          <Input
+                            name="radio1"
+                            type="radio"
+                            checked={table}
+                            // disabled={loading ? true : false}
+                            onChange={() => {
+                              setTable(true)
+                              setView(false)
+                              setCView(false)
+                            }}
+                          />
+                          {' '}
+                          <Label check className={`${table === true ? 'selected' : ''}`}>
+                            Table
+                          </Label>
+                        </div>
+                        <div className='break'></div>
+                        <div>
+                          <Input
+                            name="radio1"
+                            type="radio"
+                            checked={view}
+                            // disabled={loading ? true : false}                  
+                            onChange={() => {
+                              setView(true)
+                              setTable(false)
+                              setCView(false)
+                            }}
+                          />
+                          {' '}
+                          <Label check className={`${view === true ? 'selected' : ''}`} >
+                            View
+                          </Label>
+                        </div>
+                        <div className='break'></div>
+                        <div>
+                          <Input
+                            name="radio1"
+                            type="radio"
+                            checked={cview}
+                            // disabled={loading ? true : false}
+                            onChange={() => {
+                              setTable(false)
+                              setView(false)
+                              setCView(true)
+                            }}
+                          />
+                          {' '}
+                          <Label check className={`${cview === true ? 'selected' : ''}`}>
+                            Calculated View
+                          </Label>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+                {object && <DataTable
+                  dataTableSAP={dataTableSAP}
+                  selectAll={selectAll}
+                  selectAllData={selectAllData}
+                  setSelectAll={setSelectAll}
+                  selectSapData={selectSapData}
+                  isView={view}
+                  isTable={table}
+                  isCView={cview}
+                  loadingData={loading}
+                  openUplaodedTables={openUplaodedTables}
+                />}
+                {!object && <UserTables data={uplaodedTables} goback={goback} />}
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="1">
+            <img src='dysis.png' alt='logo' className='ds-logo' />
+            <br/>
+            <br/>
           </Col>
         </Row>
       </Container>

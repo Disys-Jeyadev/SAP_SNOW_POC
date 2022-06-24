@@ -14,12 +14,12 @@
   height: 100vh;
 }
 
-.no-right-pd{
-  padding-right: 0!important;
+.no-right-pd {
+  padding-right: 0 !important;
 }
 
-.no-left-pd{
-  padding-left: 0!important;
+.no-left-pd {
+  padding-left: 0 !important;
 }
 
 .app-header {
@@ -39,31 +39,32 @@
   opacity: 1;
 }
 
-.data-table-body{
-  background: #F8F8F8 0% 0% no-repeat padding-box;
+.data-table-body {
   opacity: 1;
   height: 89vh;
-  padding-left: 0!important;
-  padding-top:60px;
- 
+  padding-left: 0 !important;
+  padding-top: 60px;
+
 }
 
-.data-table-container{
-  border:1px solid black;
+.data-table-container {
+  border: 1px solid black;
 }
 
-.list-body{
+.list-body {
   margin-left: 10px;
 }
-.list-body-inner{
+
+.list-body-inner {
   max-height: 400px;
   background-color: #FFFFFF;
   height: 500px;
   text-align: left;
-  padding: 10px;
+  padding: 5px;
   overflow: scroll;
 }
-.list-header{
+
+.list-header {
   background: #5571DB 0% 0% no-repeat padding-box;
   opacity: 1;
   text-align: left;
@@ -73,69 +74,76 @@
   padding: 10px;
 }
 
-.arrow-data-table{
+.arrow-data-table {
   margin-top: 191px;
   height: 50px;
   width: 50px;
-  background-color: #5571DB;
+  background-color: #23B2F8;
   border-radius: 50%;
   display: inline-block;
 }
-.arrow-data-table1{
+
+.arrow-data-table1 {
   margin-top: 255px;
-    position: absolute;
-    height: 50px;
-    width: 50px;
-    background-color: #5571DB;
-    border-radius: 50%;
-    display: inline-block;
-    transform: rotate(180deg);
-    margin-left: -50px;
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  background-color: #23B2F8;
+  border-radius: 50%;
+  display: inline-block;
+  transform: rotate(180deg);
+  margin-left: -50px;
 }
 
-.view{
+.view {
   margin-top: 200px;
   padding: 25px;
   text-align: left;
   cursor: pointer;
 }
 
-.view1{
+.view1 {
   padding: 25px;
   text-align: left;
 }
-.text-left-viewitem{
+
+.text-left-viewitem {
   text-align: left;
   padding-left: 20px;
 }
-.arrow-image{
+
+.arrow-image {
   border-radius: 50%;
-  margin-top: 10px;
+  margin-top: 18px;
 }
 
-.view-text{
+.view-text {
   font-weight: bold;
   cursor: pointer;
 }
 
-.datatable-checkbox{
+.datatable-checkbox {
   margin-left: 10px;
   left: 10px;
 }
-.modal-content{
+
+.modal-content {
   margin-top: 50%;
 }
-.text-center{
+
+.text-center {
   text-align: center;
 }
-.float-left{
+
+.float-left {
   text-align: left;
   position: absolute;
   top: 100px;
   color: #4A6BE6;
   font-size: smaller;
 }
-.float-right{
+
+.float-right {
   text-align: right;
   position: absolute;
   top: 100px;
@@ -143,21 +151,103 @@
   font-size: smaller;
 }
 
-.selected{
+.selected {
   font-weight: bolder;
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 
-.img-width{
+.img-width {
   width: 10%;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
-.objets-sources{
+.objets-sources {
   display: flex;
   gap: 3%;
+}
+
+.db-logo {
+  width: 300px;
+  height: 110px;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  /* border: 1px solid #707070; */
+  border-radius: 20px;
+  opacity: 1;
+}
+
+.db-logo img{  
+  width: 100%;
+  padding-top: 24px;
+}
+
+.top-row {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.db-logo-text {
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 0px;
+  letter-spacing: 0px;
+  color: #5571DB;
+  opacity: 1;
+}
+
+.object-selection-new h5 {
+  text-align: center;
+}
+
+.object-selection-new div {
+  justify-content: center;
+}
+
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  border-top-right-radius: 10px!important;
+  border-top-left-radius: 10px!important;
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  color: white;
+  background-color: #23B2F8;
+  border-color: #ddd;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+.upper{
+  text-transform: uppercase;
+}
+
+.panel-heading-new {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-radius: 10px;
+  color: white;
+  background-color: #23B2F8;
+  border-color: #ddd;
+}
+
+.break{
+  border: 2px solid white;
+  background: white;
+}
+.ds-logo{
+  width: 100%;
 }

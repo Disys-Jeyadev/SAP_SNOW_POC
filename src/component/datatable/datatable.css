@@ -16,9 +16,21 @@
     text-align: right;
 }
 
+
 .confimHeader{
-    background: #5571DB 0% 0% no-repeat padding-box;
+    background: #23B2F8 0% 0% no-repeat padding-box;
     color: white;
+    border-top-right-radius: 10px ;
+    border-top-left-radius: 10px ;
+}
+
+.modal-content{
+    border-top-right-radius: 10px ;
+    border-top-left-radius: 10px ;
+} 
+
+.button{    
+    background: #1586D1!important;
 }
 
 .confirmbody{
@@ -31,5 +43,33 @@
 
 .search-tables{
     text-align: left;
-    margin-left: 41.5%;
+    margin-left: 38.5%;
 }
+.upper{
+    text-transform: uppercase;
+}
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+  
+  .panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    color: white;
+    background-color: #23B2F8;
+    border-color: #ddd;
+    border-radius: 10px 10px 0px 0px;
+  }
+  
+  .panel-body {
+    padding: 15px;
+  }
+  
+  .upper{
+    text-transform: uppercase;
+  }

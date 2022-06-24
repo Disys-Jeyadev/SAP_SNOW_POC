@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background: #FE0C75!important; */
+  /* background-image: url(bg.png) no-repeat; */
+  background-size: cover;
 }
 
 code {

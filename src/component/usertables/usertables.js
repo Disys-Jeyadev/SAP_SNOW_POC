@@ -105,7 +105,7 @@ const UserTables = (props) => {
 
     return (
         <div>
-            <h4><span className="f-left"><Button onClick={() => goback()} >Back</Button></span>Fresh Migration Snowflake Tables</h4>
+            <h4><span className="f-left"><Button className="button" onClick={() => goback()} >Back</Button></span>Fresh Migration Snowflake Tables</h4>
             <div className="text-left">
                     
             </div>
@@ -126,7 +126,7 @@ const UserTables = (props) => {
                 <br />
                 {loader ? 'Loading Data' : <Table
                     >
-                        <thead>
+                       {modalData && modalData.length > 0 && <thead>
                             <tr>
                                 {
                                     Object.keys(modalData && modalData.length > 0 ? modalData[0] : []).map(x => <th>
@@ -134,7 +134,7 @@ const UserTables = (props) => {
                                     </th>)
                                 }
                             </tr>
-                        </thead>
+                        </thead>}
                         <tbody>
                             {
                                 modalData && modalData.length > 0 ? modalData.map((x, i) => <tr>

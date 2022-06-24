@@ -57,19 +57,19 @@ const DataTable = (props) => {
         setFilteredData(filteredData);
     }
 
-    useEffect(()=>{
-        if(confimration){
+    useEffect(() => {
+        if (confimration) {
             setLoading(true)
         }
-    },[confimration])
+    }, [confimration])
 
 
-    const uploadTable = (data) => { 
-        axios.get(`${env}/CurrentTable`).then(res=>{
+    const uploadTable = (data) => {
+        axios.get(`${env}/CurrentTable`).then(res => {
             setprocesingTable(res.data);
         })
         const myinterval = setInterval(() => {
-            axios.get(`${env}/CurrentTable`).then(res=>{
+            axios.get(`${env}/CurrentTable`).then(res => {
                 setprocesingTable(res.data);
             })
         }, 3000);
@@ -128,9 +128,9 @@ const DataTable = (props) => {
         snowFlakedata.forEach(x => x.checked ? data.push(x.name) : '');
         if (isView) {
             uploadView(data);
-        } else if(isTable) {
+        } else if (isTable) {
             uploadTable(data);
-        }else if(isCView){
+        } else if (isCView) {
             uploadCView(data);
         }
     }
@@ -176,14 +176,11 @@ const DataTable = (props) => {
 
     return (
         <Row className='data-table-body'>
-            { viewCreated !== undefined ? viewCreated === true ? <h5 className="text-success">View created successfully</h5> :
-            <h5 className="text-danger">Failed to create view</h5> : ''}
+            {viewCreated !== undefined ? viewCreated === true ? <h5 className="text-success">View created successfully</h5> :
+                <h5 className="text-danger">Failed to create view</h5> : ''}
             <Col xs="5">
                 <div className='list-body'>
-                    <div className='list-header'>
-                        <span>
-                            <img src="sap.png" alt="sap" className="img-width" />
-                        </span>
+                    <div className='panel-heading'>
                         SAP HANA OBJECTS
                     </div>
                     <List type='unstyled' className='list-body-inner'>
@@ -230,13 +227,10 @@ const DataTable = (props) => {
                     <img src='arow.png' className='arrow-image' alt='no-imag' />
                 </div>
             </Col>
-            <Col xs="5" className="uploadbutton">
+            <Col xs="5" className="">
                 <div className='list-body'>
-                    <div className='list-header'>
-                        <span>
-                            <img src="hana.png" alt="hana" className="img-width" />
-                        </span>
-                       USER SELECTED OBJECTS
+                    <div className='panel-heading'>
+                        USER SELECTED OBJECTS
                     </div>
                     <List type='unstyled' className='list-body-inner text-left'>
                         {
@@ -254,10 +248,13 @@ const DataTable = (props) => {
                         }
                     </List>
                 </div>
-                <Button onClick={() => setConfimrationModal(true)} 
-                type="button" 
-                className="btn btn-success uploadbutton" 
-                disabled={snowFlakedata.filter(x=>x.checked).length === 0} >Submit</Button>
+                <div className="uploadbutton">
+                    <Button onClick={() => setConfimrationModal(true)}
+                        type="button"
+                        className="btn btn-success uploadbutton button"
+                        disabled={snowFlakedata.filter(x => x.checked).length === 0} >Submit</Button>
+
+                </div>
             </Col>
             <Modal
                 toggle={() => {
@@ -299,45 +296,44 @@ const DataTable = (props) => {
             {isTable ? <TransferModal isOpen={loadingDone} data={uploadedTables} openUplaodedTables={openUplaodedTables} /> : ''}
             <Modal
                 isOpen={confimrationModal}
-                size="xl"
+                size="lg"
             >
-                <ModalHeader toggle={()=>{setConfimrationModal(false)}} className="confimHeader">
-                Confirm the selected object 
+                <ModalHeader toggle={() => { setConfimrationModal(false) }} className="confimHeader upper">
+                    Confirm the selected object
                 </ModalHeader>
                 <ModalBody className="confirmbody">
-                    <input type="text" placeholder="serach" onChange={(e)=>{
+                    <input type="text" placeholder="search" onChange={(e) => {
                         setSearchText(e.target.value)
                     }} />
-                    <br/>
+                    <br />
                     <div className="search-tables">
-                    {
-                        snowFlakedata.length > 0 && snowFlakedata.filter(x=>{
-                            if(x.checked && searchText === ''){
-                                return x;
-                            }else if(x.checked && x.name.toLowerCase().includes(searchText.toLowerCase())){
-                                return x;
-                            }
-                        }).map((x ,i)=>{                            
-                            if(x.checked)
-                            {
-                                return(
-                                    <div><span></span>  {x.name}</div>
-                                )
-                            }
-                            return("");
-                        })
-                    }
-                    </div>                    
+                        {
+                            snowFlakedata.length > 0 && snowFlakedata.filter(x => {
+                                if (x.checked && searchText === '') {
+                                    return x;
+                                } else if (x.checked && x.name.toLowerCase().includes(searchText.toLowerCase())) {
+                                    return x;
+                                }
+                            }).map((x, i) => {
+                                if (x.checked) {
+                                    return (
+                                        <div><span></span>  {x.name}</div>
+                                    )
+                                }
+                                return ("");
+                            })
+                        }
+                    </div>
                 </ModalBody>
-                <ModalFooter className="confirmFooter">                
+                <ModalFooter className="confirmFooter">
                     <Button
                         color="primary"
-                        onClick={()=>uploadData()}
+                        onClick={() => uploadData()}
                     >
                         Yes
                     </Button>
                     {' '}
-                    <Button onClick={()=>{
+                    <Button onClick={() => {
                         setConfimration(false);
                         setConfimrationModal(false);
                     }}>

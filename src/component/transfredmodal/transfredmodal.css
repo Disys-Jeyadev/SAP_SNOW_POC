@@ -6,3 +6,15 @@
     max-width: 800px;
     overflow: scroll;
 }
+
+
+.panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    color: white;
+    background-color: #23B2F8;
+    border-color: #ddd;
+    border-radius: 10px 10px 0px 0px;
+  }

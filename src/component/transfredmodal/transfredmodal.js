@@ -35,8 +35,8 @@ const TransferModal = (props) => {
                 toggle={() => setOpen(false)}
                 size="lg"
             >
-                <ModalHeader toggle={() => setOpen(false)}>
-
+                <ModalHeader className="panel-heading" toggle={() => setOpen(false)}>
+                    DB Migration data transfer
                 </ModalHeader>
                 <ModalBody className="tranfer-modal-body">
                     <div className='text-center'>
@@ -46,14 +46,12 @@ const TransferModal = (props) => {
                         {
                             data && data.length > 0 ? data.map(x=><div>
                                 <div>Table Name:<strong>{x.TableName}</strong> </div>
-                                <div>Data has tranfered Cout: <strong>{x.Count}</strong></div>
-                                <div>Uploaded : <strong>{x.Status}</strong></div>
+                                <div>Data Count: <strong>{x.Count}</strong></div>
                                 <hr/>
                             </div>) : ''
                         }
                     </div>
                     <div>
-                        <hr />
                         <p className='view-text' onClick={() => {
                             setTable(!table)
                             openUplaodedTables(data)

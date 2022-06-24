@@ -69,3 +69,10 @@ li > p{
     text-decoration: underline;
     font-weight: bolder;
   }
+
+  .button{
+  }
+
+  .pagination{
+    min-width: 500px;
+  }
