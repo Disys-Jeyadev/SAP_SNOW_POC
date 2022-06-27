@@ -128,33 +128,38 @@ function App() {
 
   return (
     <div className="App">
-      <Container>
+      <Container className='main-container'>
         <Row className='top-row'>
           <Col xs="2">
             <div className='db-logo'>
               <img src='snowflak-sap.png' alt='db-logo' />
             </div>
           </Col>
-          <Col xs="10">
+          <Col xs="9" className='header-col'>
             <h3 className='db-logo-text'>
               Disys DB Migration Assistant
             </h3>
           </Col>
+          <Col xs="1" className='header-col'>
+            <img src='dysis.png' alt='logo' className='ds-logo' />
+            <br/>
+            <br/>
+          </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col xs="2">
           </Col>
           <Col xs="10">
 
           </Col>
-        </Row>
+        </Row> */}
         <Row>
-          <Col xs="2">
-          </Col>
+          {/* <Col xs="2">
+          </Col> */}
 
-          <Col xs="10">
+          <Col xs="12">
             <Row>
-              <Col xs="4">
+              <Col xs="3">
                 <div className="panel" onClick={() => { setObject(true) }} >
                   <h4 className='panel-heading upper'> Source Database</h4>
                   <div className='panel-body'>
@@ -174,7 +179,7 @@ function App() {
                   </div>
                 </div>
               </Col>
-              <Col xs="8">
+              <Col xs="9" className='header-col'>
                 <div className={object && 'panel-heading-new'}>
                   {
                     object && <div className='object-selection-new'>
@@ -267,13 +272,6 @@ function App() {
                 {!object && <UserTables data={uplaodedTables} goback={goback} />}
               </Col>
             </Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs="1">
-            <img src='dysis.png' alt='logo' className='ds-logo' />
-            <br/>
-            <br/>
           </Col>
         </Row>
       </Container>

@@ -22,7 +22,7 @@ const UserTables = (props) => {
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(10);
     const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 100;
+    const itemsPerPage = 10;
     const [modalData, setModalData] = useState([]);
     const [modalData1, setModalData1] = useState([]);
     const [noData, setNodata] = useState('Select Table');
@@ -105,7 +105,7 @@ const UserTables = (props) => {
 
     return (
         <div>
-            <h4><span className="f-left"><Button className="button" onClick={() => goback()} >Back</Button></span>Fresh Migration Snowflake Tables</h4>
+            <h4><span className="f-left"><Button className="button" onClick={() => goback()} >Back</Button></span>New Migrated Objects [Snowflake]</h4>
             <div className="text-left">
                     
             </div>
@@ -113,16 +113,14 @@ const UserTables = (props) => {
             <div className="row mt-4">
                 <div className="col-4">                    
                     <br />                    
-                    <br />                    
                     <List type="unstyled" className=" userlist text-left">
                         {
-                            tables.map((x, i )=> { return (<li><p className={i === selectedindex ? 'selected-table' : ''} onClick={()=>showData(x.TableName , i)}>{x.TableName}</p></li>) })
+                            tables.map((x, i )=> { return (<li><p className={i === selectedindex ? 'selected-table' : ''} onClick={()=>showData(x.TableName , i)}><Button className="btn btn-primary btn-custom">{x.TableName}</Button></p></li>) })
                         }
                     </List>
                 </div>
 
                 <div className="col-6">                    
-                <br />
                 <br />
                 {loader ? 'Loading Data' : <Table
                     >

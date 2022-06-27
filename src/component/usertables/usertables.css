@@ -70,9 +70,15 @@ li > p{
     font-weight: bolder;
   }
 
-  .button{
-  }
+ .btn-custom{
+  max-width: 200px;
+  min-width: 200px;
+ }
 
   .pagination{
     min-width: 500px;
+  }
+
+  .table{
+    background: white;
   }

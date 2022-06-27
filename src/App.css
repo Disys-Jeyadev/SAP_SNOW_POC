@@ -2,6 +2,19 @@
 
 .App {
   text-align: center;
+  /* width: 100vw;
+  height: 100vh; */
+  overflow: scroll;
+}
+
+/* ::-webkit-scrollbar{
+  display: none;
+} */
+
+.main-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
 }
 
 .left-conatiner {
@@ -43,7 +56,7 @@
   opacity: 1;
   height: 89vh;
   padding-left: 0 !important;
-  padding-top: 60px;
+  padding-top: 25px;
 
 }
 
@@ -186,8 +199,13 @@
 }
 
 .top-row {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+.header-col{
+  margin-top: -50px !important;
 }
 
 .db-logo-text {
@@ -242,6 +260,7 @@
   color: white;
   background-color: #23B2F8;
   border-color: #ddd;
+  margin-left: 10px;
 }
 
 .break{
