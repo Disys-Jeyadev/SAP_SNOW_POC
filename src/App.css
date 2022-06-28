@@ -2,9 +2,9 @@
 
 .App {
   text-align: center;
-  /* width: 100vw;
-  height: 100vh; */
-  overflow: scroll;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* ::-webkit-scrollbar{
@@ -16,7 +16,6 @@
   flex-direction: column;
   justify-content: left;
 }
-
 .left-conatiner {
   /* Layout Properties */
   top: 0px;

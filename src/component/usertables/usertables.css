@@ -73,6 +73,17 @@ li > p{
  .btn-custom{
   max-width: 200px;
   min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+
+ .tableName-span{
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 200px;
+  white-space: nowrap;
  }
 
   .pagination{
@@ -81,4 +92,9 @@ li > p{
 
   .table{
     background: white;
+  }
+
+  .migratedTable{
+    overflow: auto;
+    height: 500px;
   }

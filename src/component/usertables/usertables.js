@@ -115,14 +115,14 @@ const UserTables = (props) => {
                     <br />                    
                     <List type="unstyled" className=" userlist text-left">
                         {
-                            tables.map((x, i )=> { return (<li><p className={i === selectedindex ? 'selected-table' : ''} onClick={()=>showData(x.TableName , i)}><Button className="btn btn-primary btn-custom">{x.TableName}</Button></p></li>) })
+                            tables.map((x, i )=> { return (<li><p className={i === selectedindex ? 'selected-table' : ''} onClick={()=>showData(x.TableName , i)}><Button className="btn btn-primary btn-custom"><span className="tableName-span">{x.TableName}</span></Button></p></li>) })
                         }
                     </List>
                 </div>
 
-                <div className="col-6">                    
-                <br />
-                {loader ? 'Loading Data' : <Table
+                <div className="col-8">                    
+                {/* <br /> */}
+                {loader ? 'Loading Data' :<div className="migratedTable"> <Table
                     >
                        {modalData && modalData.length > 0 && <thead>
                             <tr>
@@ -142,10 +142,12 @@ const UserTables = (props) => {
                                 </tr>) : noData
                             }
                         </tbody>
-                    </Table>}
+                    </Table>
+                    </div>
+                    }
                     <br />
-                    <br />
-                    <br />
+                    {/* <br />
+                    <br /> */}
                     {
                         !loader && <ReactPaginate
                         breakLabel="..."
@@ -158,9 +160,9 @@ const UserTables = (props) => {
                         className="pagination"
                     />
                     }
+                    {/* <br />
                     <br />
-                    <br />
-                    <br />
+                    <br /> */}
                 </div>
 
 
